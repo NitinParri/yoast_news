@@ -1,4 +1,4 @@
-[globalVar = GP:tx_news_pi1|news_preview > 0]
+[traverse(request.getQueryParams(), 'tx_news_pi1/news_preview') > 0]
     lib.yoastSEO.currentURL.stdWrap.typolink {
         addQueryString.exclude = type,tx_news_pi1[news_preview]
         additionalParams = &tx_news_pi1[news]={GP:tx_news_pi1|news_preview}
@@ -7,7 +7,7 @@
 
     lib.yoastSEO.slug.stdWrap.typolink < lib.yoastSEO.currentURL.stdWrap.typolink
     lib.yoastSEO.slug.stdWrap.typolink.forceAbsoluteUrl = 0
-[global]
+[end]
 
 plugin.tx_news {
     view {
