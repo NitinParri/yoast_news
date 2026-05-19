@@ -1,4 +1,10 @@
 <?php
+
+declare(strict_types=1);
+
+use TYPO3\CMS\Core\Resource\FileType;
+use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
+
 $llPrefix = 'LLL:EXT:yoast_news/Resources/Private/Language/TCA.xlf:';
 
 $openGraphCropConfiguration = [
@@ -22,7 +28,7 @@ $openGraphCropConfiguration = [
                         'value' => 1.91 / 1
                     ],
                     'NaN' => [
-                        'title' => 'LLL:EXT:lang/Resources/Private/Language/locallang_wizards.xlf:imwizard.ratio.free',
+                        'title' => 'LLL:EXT:core/Resources/Private/Language/locallang_wizards.xlf:imwizard.ratio.free',
                         'value' => 0.0
                     ],
                 ],
@@ -32,7 +38,7 @@ $openGraphCropConfiguration = [
     ],
 ];
 
-\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addTCAcolumns(
+ExtensionManagementUtility::addTCAcolumns(
     'tx_news_domain_model_news',
     [
         'tx_yoastseo_snippetpreview' => [
@@ -62,6 +68,7 @@ $openGraphCropConfiguration = [
             'exclude' => true,
             'config' => [
                 'type' => 'input',
+                'sanitize' => 'trim',
             ]
         ],
         'tx_yoastseo_focuskeyword_analysis' => [
@@ -84,7 +91,7 @@ $openGraphCropConfiguration = [
                 'type' => 'input',
                 'size' => 40,
                 'max' => 255,
-                'eval' => 'trim'
+                'sanitize' => 'trim',
             ]
         ],
         'og_description' => [
@@ -100,33 +107,30 @@ $openGraphCropConfiguration = [
         'og_image' => [
             'exclude' => true,
             'label' => $llPrefix . 'og_image',
-            'config' => \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::getFileFieldTCAConfig(
-                'og_image',
-                [
-                    // Use the imageoverlayPalette instead of the basicoverlayPalette
-                    'overrideChildTca' => [
-                        'types' => [
-                            '0' => [
-                                'showitem' => '
-                                    --palette--;;imageoverlayPalette,
-                                    --palette--;;filePalette'
-                            ],
-                            \TYPO3\CMS\Core\Resource\File::FILETYPE_IMAGE => [
-                                'showitem' => '
-                                    --palette--;;imageoverlayPalette,
-                                    --palette--;;filePalette'
-                            ]
+            'config' => [
+                'type' => 'file',
+                // Use the imageoverlayPalette instead of the basicoverlayPalette
+                'overrideChildTca' => [
+                    'types' => [
+                        '0' => [
+                            'showitem' => '
+                                --palette--;;imageoverlayPalette,
+                                --palette--;;filePalette'
                         ],
-                        'columns' => [
-                            'crop' => $openGraphCropConfiguration
+                        FileType::IMAGE->value => [
+                            'showitem' => '
+                                --palette--;;imageoverlayPalette,
+                                --palette--;;filePalette'
                         ]
                     ],
-                    'behaviour' => [
-                        'allowLanguageSynchronization' => true
+                    'columns' => [
+                        'crop' => $openGraphCropConfiguration
                     ]
                 ],
-                $GLOBALS['TYPO3_CONF_VARS']['GFX']['imagefile_ext']
-            )
+                'behaviour' => [
+                    'allowLanguageSynchronization' => true
+                ]
+            ],
         ],
         'twitter_title' => [
             'exclude' => true,
@@ -136,7 +140,7 @@ $openGraphCropConfiguration = [
                 'type' => 'input',
                 'size' => 40,
                 'max' => 255,
-                'eval' => 'trim'
+                'sanitize' => 'trim',
             ]
         ],
         'twitter_description' => [
@@ -152,38 +156,35 @@ $openGraphCropConfiguration = [
         'twitter_image' => [
             'exclude' => true,
             'label' => $llPrefix . 'twitter_image',
-            'config' => \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::getFileFieldTCAConfig(
-                'twitter_image',
-                [
-                    // Use the imageoverlayPalette instead of the basicoverlayPalette
-                    'overrideChildTca' => [
-                        'types' => [
-                            '0' => [
-                                'showitem' => '
-                                    --palette--;;imageoverlayPalette,
-                                    --palette--;;filePalette'
-                            ],
-                            \TYPO3\CMS\Core\Resource\File::FILETYPE_IMAGE => [
-                                'showitem' => '
-                                    --palette--;;imageoverlayPalette,
-                                    --palette--;;filePalette'
-                            ]
+            'config' => [
+                'type' => 'file',
+                // Use the imageoverlayPalette instead of the basicoverlayPalette
+                'overrideChildTca' => [
+                    'types' => [
+                        '0' => [
+                            'showitem' => '
+                                --palette--;;imageoverlayPalette,
+                                --palette--;;filePalette'
                         ],
-                        'columns' => [
-                            'crop' => $openGraphCropConfiguration
+                        FileType::IMAGE->value => [
+                            'showitem' => '
+                                --palette--;;imageoverlayPalette,
+                                --palette--;;filePalette'
                         ]
                     ],
-                    'behaviour' => [
-                        'allowLanguageSynchronization' => true
+                    'columns' => [
+                        'crop' => $openGraphCropConfiguration
                     ]
                 ],
-                $GLOBALS['TYPO3_CONF_VARS']['GFX']['imagefile_ext']
-            )
+                'behaviour' => [
+                    'allowLanguageSynchronization' => true
+                ],
+            ],
         ],
     ]
 );
 
-\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addFieldsToPalette(
+ExtensionManagementUtility::addFieldsToPalette(
     'tx_news_domain_model_news',
     'yoast-social-og',
     '
@@ -191,7 +192,7 @@ $openGraphCropConfiguration = [
         '
 );
 
-\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addFieldsToPalette(
+ExtensionManagementUtility::addFieldsToPalette(
     'tx_news_domain_model_news',
     'yoast-social-twitter',
     '
@@ -199,7 +200,7 @@ $openGraphCropConfiguration = [
         '
 );
 
-\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addFieldsToPalette(
+ExtensionManagementUtility::addFieldsToPalette(
     'tx_news_domain_model_news',
     'yoast-metadata',
     '
@@ -209,7 +210,7 @@ $openGraphCropConfiguration = [
     '
 );
 
-\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addFieldsToPalette(
+ExtensionManagementUtility::addFieldsToPalette(
     'tx_news_domain_model_news',
     'yoast-focuskeyword',
     '
@@ -218,7 +219,7 @@ $openGraphCropConfiguration = [
     '
 );
 
-\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addFieldsToPalette(
+ExtensionManagementUtility::addFieldsToPalette(
     'tx_news_domain_model_news',
     'yoast-readability',
     '
@@ -237,7 +238,7 @@ $GLOBALS['TCA']['tx_news_domain_model_news']['palettes']['alternativeTitles']['s
 $GLOBALS['TCA']['tx_news_domain_model_news']['types'][0]['showitem'] =
     str_replace('--palette--;;sitemap,', '', $GLOBALS['TCA']['tx_news_domain_model_news']['types'][0]['showitem']);
 
-\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addToAllTCAtypes(
+ExtensionManagementUtility::addToAllTCAtypes(
     'tx_news_domain_model_news',
     '
     --div--;' . $llPrefix . 'news.tabs.seo,
