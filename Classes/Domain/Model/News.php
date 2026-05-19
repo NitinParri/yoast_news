@@ -1,51 +1,52 @@
 <?php
+
+declare(strict_types=1);
+
 namespace RichardHaeser\YoastSeoNews\Domain\Model;
 
-class News extends \GeorgRinger\News\Domain\Model\News
+use GeorgRinger\News\Domain\Model\FileReference;
+use GeorgRinger\News\Domain\Model\News as NewsBase;
+use TYPO3\CMS\Extbase\Annotation\ORM\Lazy;
+use TYPO3\CMS\Extbase\Persistence\ObjectStorage;
+
+class News extends NewsBase
 {
     /**
      * @var string
      */
-    protected $ogTitle;
+    protected string $ogTitle = '';
 
     /**
      * @var string
      */
-    protected $ogDescription;
+    protected string $ogDescription = '';
 
     /**
-     * @var \TYPO3\CMS\Extbase\Persistence\ObjectStorage<\GeorgRinger\News\Domain\Model\FileReference>
-     * @TYPO3\CMS\Extbase\Annotation\ORM\Lazy
+     * @var ObjectStorage<FileReference>|null
      */
-    protected $ogImage;
-
-    /**
-     * @var string
-     */
-    protected $twitterTitle;
+    #[Lazy]
+    protected ?ObjectStorage $ogImage = null;
 
     /**
      * @var string
      */
-    protected $twitterDescription;
+    protected string $twitterTitle = '';
 
     /**
-     * @var \TYPO3\CMS\Extbase\Persistence\ObjectStorage<\GeorgRinger\News\Domain\Model\FileReference>
-     * @TYPO3\CMS\Extbase\Annotation\ORM\Lazy
+     * @var string
      */
-    protected $twitterImage;
+    protected string $twitterDescription = '';
 
-    public function __construct()
-    {
-        parent::__construct();
-        $this->ogImage = new \TYPO3\CMS\Extbase\Persistence\ObjectStorage();
-        $this->twitterImage = new \TYPO3\CMS\Extbase\Persistence\ObjectStorage();
-    }
+    /**
+     * @var ObjectStorage<FileReference>|null
+     */
+    #[Lazy]
+    protected ?ObjectStorage $twitterImage = null;
 
     /**
      * @return string
      */
-    public function getOgTitle()
+    public function getOgTitle(): string
     {
         return $this->ogTitle;
     }
@@ -53,7 +54,7 @@ class News extends \GeorgRinger\News\Domain\Model\News
     /**
      * @param string $ogTitle
      */
-    public function setOgTitle(string $ogTitle)
+    public function setOgTitle(string $ogTitle): void
     {
         $this->ogTitle = $ogTitle;
     }
@@ -61,7 +62,7 @@ class News extends \GeorgRinger\News\Domain\Model\News
     /**
      * @return string
      */
-    public function getOgDescription()
+    public function getOgDescription(): string
     {
         return $this->ogDescription;
     }
@@ -69,23 +70,26 @@ class News extends \GeorgRinger\News\Domain\Model\News
     /**
      * @param string $ogDescription
      */
-    public function setOgDescription(string $ogDescription)
+    public function setOgDescription(string $ogDescription): void
     {
         $this->ogDescription = $ogDescription;
     }
 
     /**
-     * @return \TYPO3\CMS\Extbase\Persistence\ObjectStorage
+     * @return ObjectStorage<FileReference>
      */
-    public function getOgImage()
+    public function getOgImage(): ObjectStorage
     {
+        if ($this->ogImage === null) {
+            $this->ogImage = new ObjectStorage();
+        }
         return $this->ogImage;
     }
 
     /**
-     * @param \TYPO3\CMS\Extbase\Persistence\ObjectStorage $ogImage
+     * @param ObjectStorage<FileReference> $ogImage
      */
-    public function setOgImage(\TYPO3\CMS\Extbase\Persistence\ObjectStorage $ogImage)
+    public function setOgImage(ObjectStorage $ogImage): void
     {
         $this->ogImage = $ogImage;
     }
@@ -93,7 +97,7 @@ class News extends \GeorgRinger\News\Domain\Model\News
     /**
      * @return string
      */
-    public function getTwitterTitle()
+    public function getTwitterTitle(): string
     {
         return $this->twitterTitle;
     }
@@ -101,7 +105,7 @@ class News extends \GeorgRinger\News\Domain\Model\News
     /**
      * @param string $twitterTitle
      */
-    public function setTwitterTitle(string $twitterTitle)
+    public function setTwitterTitle(string $twitterTitle): void
     {
         $this->twitterTitle = $twitterTitle;
     }
@@ -109,7 +113,7 @@ class News extends \GeorgRinger\News\Domain\Model\News
     /**
      * @return string
      */
-    public function getTwitterDescription()
+    public function getTwitterDescription(): string
     {
         return $this->twitterDescription;
     }
@@ -117,23 +121,26 @@ class News extends \GeorgRinger\News\Domain\Model\News
     /**
      * @param string $twitterDescription
      */
-    public function setTwitterDescription(string $twitterDescription)
+    public function setTwitterDescription(string $twitterDescription): void
     {
         $this->twitterDescription = $twitterDescription;
     }
 
     /**
-     * @return \TYPO3\CMS\Extbase\Persistence\ObjectStorage
+     * @return ObjectStorage<FileReference>
      */
-    public function getTwitterImage()
+    public function getTwitterImage(): ObjectStorage
     {
+        if ($this->twitterImage === null) {
+            $this->twitterImage = new ObjectStorage();
+        }
         return $this->twitterImage;
     }
 
     /**
-     * @param \TYPO3\CMS\Extbase\Persistence\ObjectStorage $twitterImage
+     * @param ObjectStorage<FileReference> $twitterImage
      */
-    public function setTwitterImage(\TYPO3\CMS\Extbase\Persistence\ObjectStorage $twitterImage)
+    public function setTwitterImage(ObjectStorage $twitterImage): void
     {
         $this->twitterImage = $twitterImage;
     }
